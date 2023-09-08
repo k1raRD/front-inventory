@@ -56,7 +56,7 @@ export class CategoryComponent {
 
   openCategoryDialog() {
     const dialogRef = this.dialog.open(NewCategoryComponent, {
-      width: '450px',
+      width: '500px',
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
@@ -65,6 +65,22 @@ export class CategoryComponent {
         this.getCategories();
       } else if(result == 2){
         this.openSnackBar('Se produjo un error al guardar categoria', 'Error');
+      }
+    });
+  }
+
+  edit(id: number, name:string, description: string) {
+    const dialogRef = this.dialog.open(NewCategoryComponent, {
+      data: {id: id, name: name, description: description},
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 1) {
+        this.openSnackBar('Categoria Actualizada', 'Exitoso!');
+        this.getCategories();
+      } else if(result == 2){
+        this.openSnackBar('Se produjo un error al actualizar categoria', 'Error');
       }
     });
   }

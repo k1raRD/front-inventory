@@ -64,41 +64,58 @@ export class CategoryComponent {
       if (result == 1) {
         this.openSnackBar('Categoria Agreagada', 'Exitoso!');
         this.getCategories();
-      } else if(result == 2){
+      } else if (result == 2) {
         this.openSnackBar('Se produjo un error al guardar categoria', 'Error');
       }
     });
   }
 
-  edit(id: number, name:string, description: string) {
+  edit(id: number, name: string, description: string) {
     const dialogRef = this.dialog.open(NewCategoryComponent, {
-      data: {id: id, name: name, description: description},
-      width: '500px'
+      data: { id: id, name: name, description: description },
+      width: '500px',
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result == 1) {
         this.openSnackBar('Categoria Actualizada', 'Exitoso!');
         this.getCategories();
-      } else if(result == 2){
-        this.openSnackBar('Se produjo un error al actualizar categoria', 'Error');
+      } else if (result == 2) {
+        this.openSnackBar(
+          'Se produjo un error al actualizar categoria',
+          'Error'
+        );
       }
     });
   }
 
   delete(id: any) {
     const dialogRef = this.dialog.open(ConfirmComponent, {
-      data: {id: id},
+      data: { id: id },
     });
 
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result == 1) {
         this.openSnackBar('Categoria Eliminada', 'Exitoso!');
         this.getCategories();
-      } else if(result == 2){
-        this.openSnackBar('Se produjo un error al eliminar la categoria', 'Error');
+      } else if (result == 2) {
+        this.openSnackBar(
+          'Se produjo un error al eliminar la categoria',
+          'Error'
+        );
       }
     });
+  }
+
+  buscar(termino: string) {
+    if (termino.length === 0) {
+      return this.getCategories();
+    }
+
+    this.categoryService.getCategoryById(termino)
+      .subscribe( (resp : any) => {
+        this.processCategoriesResponse(resp);
+      })
   }
 
   openSnackBar(

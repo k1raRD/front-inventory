@@ -28,4 +28,34 @@ export class ProductService {
     const endpoint = `${base_url}/products`;
     return this.http.post(endpoint,body);
   }
+
+  /**
+   * Update product
+   * @param body data of the product to update
+   * @param id of product to update
+   */
+  updateProduct(body: any, id: any) {
+    const endpoint = `${base_url}/products/${id}`;
+    return this.http.put(endpoint, body);
+  }
+
+  /**
+   * Delete product 
+   * @param id 
+   * @returns 
+   */
+  deleteProduct(id: any) {
+    const endpoint = `${base_url}/products/${id}`;
+    return this.http.delete(endpoint);
+  }
+
+  /**
+   * Search by name
+   * @param name 
+   * @returns 
+   */
+  getProductsByName(name: string) {
+    const endpoint = `${base_url}/products/filter/${name}`;
+    return this.http.get(endpoint);
+  }
 }

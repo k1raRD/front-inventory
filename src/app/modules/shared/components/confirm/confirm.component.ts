@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { CategoryService } from '../../services/category.service';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-confirm',
@@ -11,7 +12,8 @@ export class ConfirmComponent {
   constructor(
     public dialogRef: MatDialogRef<ConfirmComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private productService: ProductService
   ) {}
 
   ngOnInit(): void {}
@@ -22,14 +24,25 @@ export class ConfirmComponent {
 
   delete() {
     if (this.data != null) {
-      this.categoryService.deleteCategory(this.data.id).subscribe(
-        (data: any) => {
-          this.dialogRef.close(1);
-        },
-        (error) => {
-          this.dialogRef.close(2);
-        }
-      );
+      if (this.data.module == 'category') {
+        this.categoryService.deleteCategory(this.data.id).subscribe(
+          (data: any) => {
+            this.dialogRef.close(1);
+          },
+          (error) => {
+            this.dialogRef.close(2);
+          }
+        );
+      } else if (this.data.module == 'product') {
+        this.productService.deleteProduct(this.data.id).subscribe(
+          (data: any) => {
+            this.dialogRef.close(1);
+          },
+          (error) => {
+            this.dialogRef.close(2);
+          }
+        );
+      }
     } else {
       this.dialogRef.close(2);
     }

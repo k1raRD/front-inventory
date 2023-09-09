@@ -5,6 +5,7 @@ import { ProductService } from '../../shared/services/product.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { NewProductComponent } from '../new-product/new-product.component';
+import { ConfirmComponent } from '../../shared/components/confirm/confirm.component';
 
 @Component({
   selector: 'app-product',
@@ -54,7 +55,7 @@ export class ProductComponent {
       let listProduct = resp.product.products;
 
       listProduct.forEach((element: ProductElement) => {
-        element.category = element.category.name;
+        //element.category = element.category.name;
         element.picture = 'data:image/jpeg;base64,' + element.picture;
         dateProduct.push(element);
       });
@@ -87,6 +88,48 @@ export class ProductComponent {
     return this.snackBar.open(message, action, {
       duration: 2000,
     });
+  }
+
+  edit(id:number, name:string, price:number, quantity:number, category:any) {
+    const dialogRef = this.dialog.open(NewProductComponent, {
+      width: '500px',
+      data: {id: id, name: name, price: price, quantity : quantity, category : category}
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 1) {
+        this.openSnackBar('Producto editado', 'Exitoso!');
+        this.getProducts();
+      } else if (result == 2) {
+        this.openSnackBar('Se produjo un error al editar producto', 'Error');
+      }
+    });
+  }
+
+  delete(id : any) {
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      data: {id: id, module: "product"}
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result == 1) {
+        this.openSnackBar('Producto eliminado', 'Exitoso!');
+        this.getProducts();
+      } else if (result == 2) {
+        this.openSnackBar('Se produjo un error al eliminar producto', 'Error');
+      }
+    }); 
+  }
+
+  buscar(nombre : any) {
+    if(nombre.length === 0) {
+        return this.getProducts();
+    }
+
+    this.productService.getProductsByName(nombre)
+      .subscribe((response) => {
+        this.processProductResponse(response);
+      });
   }
 }
 

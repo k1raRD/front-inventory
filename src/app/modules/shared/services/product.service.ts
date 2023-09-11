@@ -5,11 +5,10 @@ import { environment } from 'src/environments/environment';
 const base_url = environment.base_url;
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Get all products
@@ -26,7 +25,7 @@ export class ProductService {
    */
   saveProduct(body: any) {
     const endpoint = `${base_url}/products`;
-    return this.http.post(endpoint,body);
+    return this.http.post(endpoint, body);
   }
 
   /**
@@ -40,9 +39,9 @@ export class ProductService {
   }
 
   /**
-   * Delete product 
-   * @param id 
-   * @returns 
+   * Delete product
+   * @param id
+   * @returns
    */
   deleteProduct(id: any) {
     const endpoint = `${base_url}/products/${id}`;
@@ -51,11 +50,22 @@ export class ProductService {
 
   /**
    * Search by name
-   * @param name 
-   * @returns 
+   * @param name
+   * @returns
    */
   getProductsByName(name: string) {
     const endpoint = `${base_url}/products/filter/${name}`;
     return this.http.get(endpoint);
+  }
+
+  /**
+   * Export to excel
+   * @returns 
+   */
+  exportProductsToExcel() {
+    const endpoint = `${base_url}/products/export/excel`;
+    return this.http.get(endpoint, {
+      responseType: 'blob',
+    });
   }
 }
